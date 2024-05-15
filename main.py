@@ -21,6 +21,7 @@ def render_map():
     canvas.delete("all")
     for agent in agents:
         canvas.create_oval(agent.x - 10, agent.y - 10, agent.x + 10, agent.y + 10)
+        canvas.create_line(agent.x, agent.y, agent.x + agent.direction[0]*20, agent.y + agent.direction[1]*20)
 
 
 agents = [Agent(50, 50, (0, 10)), Agent(250, 50, (0, 10)), Agent(500, 50, (0, 10))]
