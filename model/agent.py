@@ -9,7 +9,7 @@ def normalize_vec(vec: Tuple[int, int]):
     return vec / norm
 
 
-class Agent:
+class CouzinAgent:
     def __init__(self, x, y, direction: Tuple[int, int], r_zone, o_zone, a_zone):
         self.x = x
         self.y = y

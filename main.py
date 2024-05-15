@@ -5,7 +5,7 @@ import time
 import tkinter as tk
 from tkinter import Canvas
 import threading
-from model.agent import Agent
+from model.agent import CouzinAgent
 
 
 def tick_agents():
@@ -30,9 +30,9 @@ def motion(event):
 
 
 agents = []
-agents.append(Agent(50, 50, (0, 10), 0, 0, 0))
-agents.append(Agent(250, 50, (0, 10), 0, 0, 0))
-agents.append(Agent(500, 50, (0, 10), 0, 0, 0))
+agents.append(CouzinAgent(50, 50, (0, 10), 0, 0, 0))
+agents.append(CouzinAgent(250, 50, (0, 10), 0, 0, 0))
+agents.append(CouzinAgent(500, 50, (0, 10), 0, 0, 0))
 predatorPos = (500, 500)
 root = tk.Tk()
 root.geometry("1000x1000")
