@@ -18,3 +18,11 @@ class Agent:
     def tick(self):
         self.x += self.direction[0]
         self.y += self.direction[1]
+
+    @property
+    def direction(self) -> Tuple[int, int]:
+        return self.direction
+
+    @direction.setter
+    def direction(self, vec: Tuple[int, int]):
+        self.direction = normalize_vec(vec)
