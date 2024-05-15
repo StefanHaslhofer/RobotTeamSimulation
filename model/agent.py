@@ -2,7 +2,7 @@ from typing import Tuple
 import numpy as np
 
 
-def normalize_vec(vec):
+def normalize_vec(vec: Tuple[int, int]):
     norm = np.linalg.norm(vec)
     if norm == 0:
         return vec
