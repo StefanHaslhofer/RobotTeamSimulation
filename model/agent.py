@@ -29,6 +29,9 @@ class Agent:
         2. calculate forces on the agent exerted by all other agents and predators
         3. adapt direction
         4. update position based on direction
+
+        :param agents: list of agents in the simulation
+        :param predators: list of predators in the simulation
         """
         self.x += self._direction[0]
         self.y += self._direction[1]
