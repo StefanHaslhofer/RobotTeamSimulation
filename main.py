@@ -13,21 +13,32 @@ def tick_agents():
     for agent in agents:
         agent.tick()
     render_map()
-    threading.Timer(1, tick_agents).start()
+    threading.Timer(1.0/20, tick_agents).start()
 
 
 def render_map():
     global agents, canvas
     canvas.delete("all")
     for agent in agents:
-        canvas.create_oval(agent.x - 10, agent.y - 10, agent.x + 10, agent.y + 10)
-        canvas.create_line(agent.x, agent.y, agent.x + agent.direction[0]*20, agent.y + agent.direction[1]*20)
+        canvas.create_oval(agent.x - 10, agent.y - 10, agent.x + 10, agent.y + 10, fill = 'blue4')
+        canvas.create_line(agent.x, agent.y, agent.x + int(agent.direction[0]*20), agent.y + int(agent.direction[1]*20))
+    canvas.create_oval(predatorPos[0] - 20, predatorPos[1] - 20, predatorPos[0] + 20, predatorPos[1] + 20, fill = 'red2')
+
+def motion(event):
+    global predatorPos
+    predatorPos = (canvas.canvasx(event.x), canvas.canvasy(event.y))
 
 
-agents = [Agent(50, 50, (0, 10)), Agent(250, 50, (0, 10)), Agent(500, 50, (0, 10))]
+agents = []
+agents.append(Agent(50, 50, (0, 10), 0, 0, 0))
+agents.append(Agent(250, 50, (0, 10), 0, 0, 0))
+agents.append(Agent(500, 50, (0, 10), 0, 0, 0))
+predatorPos = (500, 500)
 root = tk.Tk()
 root.geometry("1000x1000")
 canvas = Canvas(root, width=1000, height=1000)
+canvas.configure(bg = 'SkyBlue1')
+canvas.bind("<Motion>", motion)
 canvas.pack()
 
 tick_agents()
