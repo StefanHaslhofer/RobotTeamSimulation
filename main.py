@@ -11,7 +11,7 @@ from model.agent import CouzinAgent
 def tick_agents():
     global agents
     for agent in agents:
-        agent.tick()
+        agent.tick({}, {})
     render_map()
     threading.Timer(1.0/20, tick_agents).start()
 
