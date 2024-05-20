@@ -11,7 +11,7 @@ from model.agent import CouzinAgent
 def tick_agents():
     global agents
     for agent in agents:
-        agent.tick({}, {})
+        agent.tick(agents, {})
     render_map()
     threading.Timer(1.0/20, tick_agents).start()
 
@@ -30,9 +30,9 @@ def motion(event):
 
 
 agents = []
-agents.append(CouzinAgent(50, 50, (0, 10), 0, 0, 0))
-agents.append(CouzinAgent(250, 50, (0, 10), 0, 0, 0))
-agents.append(CouzinAgent(500, 50, (0, 10), 0, 0, 0))
+agents.append(CouzinAgent(50, 50, (0, 10), 10, 20, 10))
+agents.append(CouzinAgent(250, 50, (0, 10), 10, 20, 10))
+agents.append(CouzinAgent(600, 50, (0, 10), 10, 20, 10))
 predatorPos = (500, 500)
 root = tk.Tk()
 root.geometry("1000x1000")
