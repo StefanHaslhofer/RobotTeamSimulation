@@ -7,6 +7,9 @@ from tkinter import Canvas
 import threading
 from model.couzin_agent import CouzinAgent
 
+AGENT_SIZE = 5
+PREDATOR_SIZE = 10
+
 
 def tick_agents():
     global agents
@@ -21,10 +24,12 @@ def render_map():
     global agents, canvas
     canvas.delete("all")
     for agent in agents:
-        canvas.create_oval(agent.x - 10, agent.y - 10, agent.x + 10, agent.y + 10, fill='blue4')
+        canvas.create_oval(agent.x - AGENT_SIZE, agent.y - AGENT_SIZE, agent.x + AGENT_SIZE, agent.y + AGENT_SIZE,
+                           fill='blue4')
         canvas.create_line(agent.x, agent.y, agent.x + int(agent.direction[0] * 20),
                            agent.y + int(agent.direction[1] * 20))
-    canvas.create_oval(predatorPos[0] - 20, predatorPos[1] - 20, predatorPos[0] + 20, predatorPos[1] + 20, fill='red2')
+    canvas.create_oval(predatorPos[0] - PREDATOR_SIZE, predatorPos[1] - PREDATOR_SIZE, predatorPos[0] + PREDATOR_SIZE,
+                       predatorPos[1] + PREDATOR_SIZE, fill='red2')
 
 
 def motion(event):
