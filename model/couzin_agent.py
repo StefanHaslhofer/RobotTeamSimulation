@@ -3,6 +3,7 @@ from typing import List
 import numpy as np
 
 from model.agent import Agent
+from model.predator import Predator, affecting_predators
 from util import normalize_vec, add_vec
 
 
@@ -36,8 +37,11 @@ class CouzinAgent(Agent):
         agents_o = agents_between_radi(agents, (self.x, self.y), self.r_zone, self.o_zone)
         agents_a = agents_between_radi(agents, (self.x, self.y), self.o_zone, self.a_zone)
 
+        # search for predators that influence the client
+        predators_r = affecting_predators(predators, (self.x, self.y))
+
         # calculate forces
-        self.f_r = calculate_repulsion_force(self, agents_r)
+        self.f_r = calculate_repulsion_force(self, agents_r, predators_r)
         self.f_o = calculate_orientation_force(self, agents_o)
         self.f_a = calculate_attraction_force(self, agents_a)
 
@@ -47,35 +51,51 @@ class CouzinAgent(Agent):
         super().tick(agents, predators)
 
 
-def agents_between_radi(agents, center, inner, outer) -> List[CouzinAgent]:
+def agents_between_radi(agents, coords, inner, outer) -> List[Agent]:
     """
     calculate all agents within the field between an inner radius and an outer radius
 
     :param agents: list of agents
+    :param coords: coordinates of agent
     :param inner: inner radius around agent
     :param outer: outer radius around agent
     :return: list of all agents within radius
     """
     agents_in_radius = []
     for agent in agents:
-        pos = np.linalg.norm([agent.x - center[0], agent.y - center[1]])
+        pos = np.linalg.norm([agent.x - coords[0], agent.y - coords[1]])
         if inner < pos <= outer:
             agents_in_radius.append(agent)
 
     return agents_in_radius
 
 
-def calculate_repulsion_force(center, agents: List[CouzinAgent]) -> Tuple[float, float]:
+def calculate_repulsion_force(center, agents: List[Agent], predators: List[Predator]) -> Tuple[float, float]:
+    """
+    calculate repulsion force imposed by neighbouring agents and predators
+
+    :param center: position of agent
+    :param agents: neighbouring agents
+    :param predators: nearby predators
+    :return:
+    """
     force = (0, 0)
 
+    # repulsion form nearby agents
     for a in agents:
         d = normalize_vec((a.x - center.x, a.y - center.y))
         force = add_vec(force, d)
 
+    # repulsion form nearby predators
+    for p in predators:
+        d = normalize_vec((p.x - center.x, p.y - center.y))
+        # multiply with scaler because predator repulsion is stronger
+        force = add_vec(force, tuple(np.multiply(d, p.force_scale)))
+
     return -force[0], -force[1]
 
 
-def calculate_orientation_force(center, agents: List[CouzinAgent]) -> Tuple[float, float]:
+def calculate_orientation_force(center, agents: List[Agent]) -> Tuple[float, float]:
     force = (0, 0)
 
     for a in agents:
@@ -84,7 +104,7 @@ def calculate_orientation_force(center, agents: List[CouzinAgent]) -> Tuple[floa
     return force
 
 
-def calculate_attraction_force(center, agents: List[CouzinAgent]) -> Tuple[float, float]:
+def calculate_attraction_force(center, agents: List[Agent]) -> Tuple[float, float]:
     force = (0, 0)
 
     for a in agents:

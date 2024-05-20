@@ -6,6 +6,7 @@ import tkinter as tk
 from tkinter import Canvas
 import threading
 from model.couzin_agent import CouzinAgent
+from model.predator import Predator
 
 AGENT_SIZE = 5
 PREDATOR_SIZE = 10
@@ -14,27 +15,29 @@ PREDATOR_SIZE = 10
 def tick_agents():
     global agents
     for agent in agents:
-        agent.tick(agents, {})
+        agent.tick(agents, predators)
     render_map()
     threading.Timer(1.0 / 20, tick_agents).start()
 
 
 def render_map():
     # TODO if agents leaves canvas he reenter canvas on opposite site
-    global agents, canvas
+    global agents, predators, canvas
     canvas.delete("all")
     for agent in agents:
         canvas.create_oval(agent.x - AGENT_SIZE, agent.y - AGENT_SIZE, agent.x + AGENT_SIZE, agent.y + AGENT_SIZE,
                            fill='blue4')
         canvas.create_line(agent.x, agent.y, agent.x + int(agent.direction[0] * 20),
                            agent.y + int(agent.direction[1] * 20))
-    canvas.create_oval(predatorPos[0] - PREDATOR_SIZE, predatorPos[1] - PREDATOR_SIZE, predatorPos[0] + PREDATOR_SIZE,
-                       predatorPos[1] + PREDATOR_SIZE, fill='red2')
+
+    for p in predators:
+        canvas.create_oval(p.x - PREDATOR_SIZE, p.y - PREDATOR_SIZE, p.x + PREDATOR_SIZE, p.y + PREDATOR_SIZE,
+                           fill='red2')
 
 
 def motion(event):
-    global predatorPos
-    predatorPos = (canvas.canvasx(event.x), canvas.canvasy(event.y))
+    predators[0].x = canvas.canvasx(event.x)
+    predators[0].y = canvas.canvasy(event.y)
 
 
 agents = []
@@ -43,7 +46,10 @@ agents.append(CouzinAgent(250, 50, (0, 10), 20, 50, 300))
 agents.append(CouzinAgent(600, 50, (0, 10), 20, 50, 300))
 agents.append(CouzinAgent(850, 50, (0, 10), 20, 50, 300))
 agents.append(CouzinAgent(600, 150, (0, 10), 20, 50, 300))
-predatorPos = (500, 500)
+
+predators = []
+predators.append(Predator(500, 500, 100, 5))
+
 root = tk.Tk()
 root.geometry("1000x1000")
 canvas = Canvas(root, width=1000, height=1000)
