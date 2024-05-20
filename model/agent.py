@@ -18,7 +18,7 @@ class CouzinAgent:
     def __init__(self, x, y, direction: Tuple[float, float], r_zone, o_zone, a_zone):
         self.x = x
         self.y = y
-        self._direction = normalize_vec(direction)
+        self.direction = direction
         self.r_zone = r_zone  # repulsion zone radius
         self.o_zone = o_zone  # orientation zone radius
         self.a_zone = a_zone  # attraction zone radius
@@ -42,9 +42,9 @@ class CouzinAgent:
         agents = list(filter(lambda a: a is not self, agents))
 
         # search for agents in zones
-        agents_r = agents_between_radi(agents, 0, self.r_zone)
-        agents_o = agents_between_radi(agents, self.r_zone, self.o_zone)
-        agents_a = agents_between_radi(agents, self.o_zone, self.a_zone)
+        agents_r = agents_between_radi(agents, (self.x, self.y), 0, self.r_zone)
+        agents_o = agents_between_radi(agents, (self.x, self.y), self.r_zone, self.o_zone)
+        agents_a = agents_between_radi(agents, (self.x, self.y), self.o_zone, self.a_zone)
 
         # calculate forces
         self.f_r = calculate_repulsion_force(self, agents_r)
@@ -52,7 +52,7 @@ class CouzinAgent:
         self.f_a = calculate_attraction_force(self, agents_a)
 
         # change direction according to acting forces
-        self._direction = tuple(np.sum([self.f_r, self.f_o, self.f_a], axis=0))
+        self.direction = tuple(np.sum([self._direction, self.f_r, self.f_o, self.f_a], axis=0))
 
         # change position along direction vector
         self.x += self._direction[0]
@@ -67,7 +67,7 @@ class CouzinAgent:
         self._direction = normalize_vec(vec)
 
 
-def agents_between_radi(agents, inner, outer) -> List[CouzinAgent]:
+def agents_between_radi(agents, center, inner, outer) -> List[CouzinAgent]:
     """
     calculate all agents within the field between an inner radius and an outer radius
 
@@ -78,7 +78,7 @@ def agents_between_radi(agents, inner, outer) -> List[CouzinAgent]:
     """
     agents_in_radius = []
     for agent in agents:
-        pos = np.linalg.norm([agent.x, agent.y])
+        pos = np.linalg.norm([agent.x - center[0], agent.y - center[1]])
         if inner < pos <= outer:
             agents_in_radius.append(agent)
 

@@ -17,6 +17,7 @@ def tick_agents():
 
 
 def render_map():
+    # TODO if agents leaves canvas he reenter canvas on opposite site
     global agents, canvas
     canvas.delete("all")
     for agent in agents:
@@ -30,9 +31,9 @@ def motion(event):
 
 
 agents = []
-agents.append(CouzinAgent(50, 50, (0, 10), 10, 20, 10))
-agents.append(CouzinAgent(250, 50, (0, 10), 10, 20, 10))
-agents.append(CouzinAgent(600, 50, (0, 10), 10, 20, 10))
+agents.append(CouzinAgent(50, 50, (0, 10), 20, 50, 300))
+agents.append(CouzinAgent(250, 50, (0, 10), 20, 50, 300))
+agents.append(CouzinAgent(600, 50, (0, 10), 20, 50, 300))
 predatorPos = (500, 500)
 root = tk.Tk()
 root.geometry("1000x1000")
