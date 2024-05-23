@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from util import normalize_vec
+from constants import *
 
 
 class Agent:
@@ -13,6 +14,9 @@ class Agent:
         # change position along direction vector
         self.x += self._direction[0]
         self.y += self._direction[1]
+        # cap positions at the edge of the map
+        self.x = min(MAP_SIZE_X, max(0, self.x))
+        self.y = min(MAP_SIZE_Y, max(0, self.y))
 
     @property
     def direction(self) -> Tuple:

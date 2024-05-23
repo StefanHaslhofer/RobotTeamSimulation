@@ -7,9 +7,7 @@ from tkinter import Canvas
 import threading
 from model.couzin_agent import CouzinAgent
 from model.predator import Predator
-
-AGENT_SIZE = 5
-PREDATOR_SIZE = 10
+from constants import *
 
 
 def tick_agents():
@@ -51,8 +49,8 @@ predators = []
 predators.append(Predator(500, 500, 100, 5))
 
 root = tk.Tk()
-root.geometry("1000x1000")
-canvas = Canvas(root, width=1000, height=1000)
+root.geometry(f'{MAP_SIZE_X}x{MAP_SIZE_Y}')
+canvas = Canvas(root, width=MAP_SIZE_X, height=MAP_SIZE_Y)
 canvas.configure(bg='SkyBlue1')
 canvas.bind("<Motion>", motion)
 canvas.pack()
