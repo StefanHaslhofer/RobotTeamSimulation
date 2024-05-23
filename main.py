@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 import matplotlib as plt
 from PIL import Image, ImageDraw, ImageColor
@@ -39,11 +41,17 @@ def motion(event):
 
 
 agents = []
-agents.append(CouzinAgent(50, 50, (0, 10), 20, 50, 300))
-agents.append(CouzinAgent(250, 50, (0, 10), 20, 50, 300))
-agents.append(CouzinAgent(600, 50, (0, 10), 20, 50, 300))
-agents.append(CouzinAgent(850, 50, (0, 10), 20, 50, 300))
-agents.append(CouzinAgent(600, 150, (0, 10), 20, 50, 300))
+for i in range(20):
+    agents.append(
+        CouzinAgent(
+            random.randrange(0, MAP_SIZE_X),
+            random.randrange(0, MAP_SIZE_Y),
+            (random.randrange(-1, 1), random.randrange(-1, 1)),
+            20,
+            50,
+            300
+        )
+    )
 
 predators = []
 predators.append(Predator(500, 500, 100, 5))
