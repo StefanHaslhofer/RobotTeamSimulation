@@ -8,8 +8,8 @@ from util import normalize_vec, add_vec
 
 
 class CouzinAgent(Agent):
-    def __init__(self, x, y, direction: Tuple[float, float], r_zone, o_zone, a_zone):
-        super().__init__(x, y, direction)
+    def __init__(self, x, y, direction: Tuple[float, float], speed, r_zone, o_zone, a_zone):
+        super().__init__(x, y, direction, speed)
         self.r_zone = r_zone  # repulsion zone radius
         self.o_zone = o_zone  # orientation zone radius
         self.a_zone = a_zone  # attraction zone radius

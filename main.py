@@ -9,6 +9,7 @@ from tkinter import Canvas
 import threading
 from model.couzin_agent import CouzinAgent
 from model.predator import Predator
+import model.predator
 from constants import *
 
 
@@ -16,6 +17,8 @@ def tick_agents():
     global agents
     for agent in agents:
         agent.tick(agents, predators)
+    for pred in predators:
+        pred.tick(agents, predators)
     render_map()
     threading.Timer(1.0 / 20, tick_agents).start()
 
@@ -36,8 +39,8 @@ def render_map():
 
 
 def motion(event):
-    predators[0].x = canvas.canvasx(event.x)
-    predators[0].y = canvas.canvasy(event.y)
+    model.predator.target_x = canvas.canvasx(event.x)
+    model.predator.target_y = canvas.canvasy(event.y)
 
 
 agents = []
@@ -47,14 +50,14 @@ for i in range(20):
             random.randrange(0, MAP_SIZE_X),
             random.randrange(0, MAP_SIZE_Y),
             (random.randrange(-1, 1), random.randrange(-1, 1)),
+            3,
             20,
             50,
             300
         )
     )
 
-predators = []
-predators.append(Predator(500, 500, 100, 5))
+predators = [Predator(500, 500, 5, 100, 5)]
 
 root = tk.Tk()
 root.geometry(f'{MAP_SIZE_X}x{MAP_SIZE_Y}')
