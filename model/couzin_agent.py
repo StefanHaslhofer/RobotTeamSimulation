@@ -44,7 +44,7 @@ class CouzinAgent(Agent):
         predators_r = affecting_predators(predators, (self.x, self.y))
 
         # search for tasks that influence the agent
-        tasks_a = affecting_tasks(predators, (self.x, self.y))
+        tasks_a = affecting_tasks(tasks, (self.x, self.y))
 
         # calculate forces
         self.f_r = calculate_repulsion_force(self, agents_r, predators_r)
@@ -121,7 +121,7 @@ def calculate_attraction_force(center, agents: List[Agent], tasks: List[Task]) -
     # attraction form nearby predators
     for t in tasks:
         d = normalize_vec((t.x - center.x, t.y - center.y))
-        # multiply with scaler because predator repulsion is stronger
+        # multiply with scaler because task attraction is stronger
         force = add_vec(force, tuple(np.multiply(d, t.force_scale)))
 
     return force
