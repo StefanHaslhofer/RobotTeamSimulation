@@ -12,6 +12,9 @@ class Task(Agent):
         self.radius = radius  # radius of attraction area around task
         self.force_scale = force_scale
 
+    def decrease_scope(self):
+        if self.scope > 0:
+            self.scope -= 1
 
 def affecting_tasks(tasks: List[Task], coords) -> List[Task]:
     af_tasks = []

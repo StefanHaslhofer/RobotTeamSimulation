@@ -11,7 +11,9 @@ from model.task import Task
 
 
 def tick_agents():
-    global agents
+    global agents, tasks, predators
+    # remove tasks with scope 0
+    tasks[:] = filter(lambda t: t.scope > 0, tasks)
     for agent in agents:
         agent.tick(agents, predators, tasks)
     for pred in predators:
@@ -35,8 +37,9 @@ def render_map():
                            fill='red2')
 
     for t in tasks:
+        size = TASK_SIZE * (t.scope / TASK_SCOPE)
         # size of task is equal to its scope
-        canvas.create_oval(t.x - t.scope, t.y - t.scope, t.x + t.scope, t.y + t.scope, fill='green2')
+        canvas.create_oval(t.x - size, t.y - size, t.x + size, t.y + size, fill='green2')
 
 
 def motion(event):
@@ -70,7 +73,7 @@ for i in range(20):
         )
     )
 
-predators = [Predator(500, 500, 5, 100, 5)]
+predators = [Predator(500, 500, 8, 100, 5)]
 
 root = tk.Tk()
 root.geometry(f'{MAP_SIZE_X}x{MAP_SIZE_Y}')
