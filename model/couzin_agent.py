@@ -1,9 +1,11 @@
-from typing import Tuple
 from typing import List
+from typing import Tuple
+
 import numpy as np
 
 from model.agent import Agent
 from model.predator import Predator, affecting_predators
+from model.task import Task, affecting_tasks
 from util import normalize_vec, add_vec
 
 
@@ -17,17 +19,18 @@ class CouzinAgent(Agent):
         self.f_o = (0, 0)  # orientation force
         self.f_a = (0, 0)  # attraction force
 
-    def tick(self, agents, predators):
+    def tick(self, agents, predators, tasks):
         """
         perform a simulation step
 
         1. search for agents within each zones
-        2. calculate forces on the agent exerted by all other agents and predators
+        2. calculate forces on the agent exerted by all other agents, predators and tasks
         3. adapt direction
         4. update position based on direction
 
         :param agents: list of agents in the simulation
         :param predators: list of predators in the simulation
+        :param tasks: list of tasks in the simulation
         """
         # filter out self
         agents = list(filter(lambda a: a is not self, agents))
@@ -37,18 +40,21 @@ class CouzinAgent(Agent):
         agents_o = agents_between_radi(agents, (self.x, self.y), self.r_zone, self.o_zone)
         agents_a = agents_between_radi(agents, (self.x, self.y), self.o_zone, self.a_zone)
 
-        # search for predators that influence the client
+        # search for predators that influence the agent
         predators_r = affecting_predators(predators, (self.x, self.y))
+
+        # search for tasks that influence the agent
+        tasks_a = affecting_tasks(predators, (self.x, self.y))
 
         # calculate forces
         self.f_r = calculate_repulsion_force(self, agents_r, predators_r)
         self.f_o = calculate_orientation_force(self, agents_o)
-        self.f_a = calculate_attraction_force(self, agents_a)
+        self.f_a = calculate_attraction_force(self, agents_a, tasks_a)
 
         # change direction according to acting forces
         self.direction = tuple(np.sum([self._direction, self.f_r, self.f_o, self.f_a], axis=0))
 
-        super().tick(agents, predators)
+        super().tick(agents, predators, tasks)
 
 
 def agents_between_radi(agents, coords, inner, outer) -> List[Agent]:
@@ -104,12 +110,18 @@ def calculate_orientation_force(center, agents: List[Agent]) -> Tuple[float, flo
     return force
 
 
-def calculate_attraction_force(center, agents: List[Agent]) -> Tuple[float, float]:
+def calculate_attraction_force(center, agents: List[Agent], tasks: List[Task]) -> Tuple[float, float]:
     force = (0, 0)
 
     for a in agents:
         # normalized distance between center and all agents
         d = normalize_vec((a.x - center.x, a.y - center.y))
         force = add_vec(force, d)
+
+    # attraction form nearby predators
+    for t in tasks:
+        d = normalize_vec((t.x - center.x, t.y - center.y))
+        # multiply with scaler because predator repulsion is stronger
+        force = add_vec(force, tuple(np.multiply(d, t.force_scale)))
 
     return force

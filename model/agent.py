@@ -1,7 +1,7 @@
 from typing import Tuple
 
-from util import normalize_vec
 from constants import *
+from util import normalize_vec
 
 
 class Agent:
@@ -11,7 +11,7 @@ class Agent:
         self.direction = direction
         self.speed = speed
 
-    def tick(self, agents, predators):
+    def tick(self, agents, predators, tasks):
         # change position along direction vector
         self.x += self.direction[0] * self.speed
         self.y += self.direction[1] * self.speed

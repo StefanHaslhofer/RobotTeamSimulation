@@ -1,31 +1,28 @@
 import random
-
-import numpy as np
-import matplotlib as plt
-from PIL import Image, ImageDraw, ImageColor
-import time
+import threading
 import tkinter as tk
 from tkinter import Canvas
-import threading
-from model.couzin_agent import CouzinAgent
-from model.predator import Predator
+
 import model.predator
 from constants import *
+from model.couzin_agent import CouzinAgent
+from model.predator import Predator
+from model.task import Task
 
 
 def tick_agents():
     global agents
     for agent in agents:
-        agent.tick(agents, predators)
+        agent.tick(agents, predators, tasks)
     for pred in predators:
-        pred.tick(agents, predators)
+        pred.tick(agents, predators, tasks)
     render_map()
     threading.Timer(1.0 / 20, tick_agents).start()
 
 
 def render_map():
     # TODO if agents leaves canvas he reenter canvas on opposite site
-    global agents, predators, canvas
+    global agents, predators, tasks, canvas
     canvas.delete("all")
     for agent in agents:
         canvas.create_oval(agent.x - AGENT_SIZE, agent.y - AGENT_SIZE, agent.x + AGENT_SIZE, agent.y + AGENT_SIZE,
@@ -36,6 +33,10 @@ def render_map():
     for p in predators:
         canvas.create_oval(p.x - PREDATOR_SIZE, p.y - PREDATOR_SIZE, p.x + PREDATOR_SIZE, p.y + PREDATOR_SIZE,
                            fill='red2')
+
+    for t in tasks:
+        # size of task is equal to its scope
+        canvas.create_oval(t.x - t.scope, t.y - t.scope, t.x + t.scope, t.y + t.scope, fill='green2')
 
 
 def motion(event):
@@ -54,6 +55,18 @@ for i in range(20):
             20,
             50,
             300
+        )
+    )
+
+tasks = []
+for i in range(20):
+    tasks.append(
+        Task(
+            random.randrange(0, MAP_SIZE_X),
+            random.randrange(0, MAP_SIZE_Y),
+            TASK_SCOPE,
+            TASK_ATTRACTION_RADIUS,
+            TASK_FORCE_SCALE
         )
     )
 
