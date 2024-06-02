@@ -19,7 +19,7 @@ def tick_agents():
     for pred in predators:
         pred.tick(agents, predators, tasks)
     render_map()
-    threading.Timer(1.0 / 20, tick_agents).start()
+    threading.Timer(1.0 / TICKS_PER_SECOND, tick_agents).start()
 
 
 def render_map():
