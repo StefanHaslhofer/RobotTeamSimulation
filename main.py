@@ -91,6 +91,7 @@ def generateAndStart():
                 random.randrange(MAP_INNER_BORDER, MAP_SIZE_Y - MAP_INNER_BORDER),
                 int(sliderTaskScope.get()),
                 TASK_ATTRACTION_RADIUS,
+                TASK_ACTION_RADIUS,
                 TASK_FORCE_SCALE
             )
         )

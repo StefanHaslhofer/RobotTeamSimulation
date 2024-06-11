@@ -46,7 +46,9 @@ class CouzinAgent(Agent):
         # search for tasks that influence the agent
         tasks_a = affecting_tasks(tasks, (self.x, self.y))
         for t in tasks_a:
-            t.decrease_scope()
+            pos = np.linalg.norm([t.x - self.x, t.y - self.y])
+            if pos <= t.action_radius:
+                t.decrease_scope()
 
         # calculate forces
         self.f_r = calculate_repulsion_force(self, agents_r, predators_r)

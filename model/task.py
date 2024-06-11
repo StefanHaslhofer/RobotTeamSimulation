@@ -6,10 +6,11 @@ from model.agent import Agent
 
 
 class Task(Agent):
-    def __init__(self, x, y, scope, radius, force_scale):
+    def __init__(self, x, y, scope, radius, action_radius, force_scale):
         super().__init__(x, y, (0, 0), 0)
         self.scope = scope
         self.radius = radius  # radius of attraction area around task
+        self.action_radius = action_radius  # radius an agent needs to enter to perform the task
         self.force_scale = force_scale
 
     def decrease_scope(self):
