@@ -75,7 +75,7 @@ def generateAndStart():
             CouzinAgent(
                 random.randrange(0, MAP_SIZE_X),
                 random.randrange(0, MAP_SIZE_Y),
-                (random.randrange(-1, 1), random.randrange(-1, 1)),
+                (random.uniform(-1, 1), random.uniform(-1, 1)),
                 3,
                 R_ZONE_RADIUS,
                 O_ZONE_RADIUS,
