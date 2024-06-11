@@ -45,7 +45,7 @@ def render_map():
                            fill='red2')
 
     for t in tasks:
-        size = TASK_SIZE * (t.scope / TASK_SCOPE)
+        size = (t.scope/sliderTaskScope.get()) * TASK_SIZE
         # size of task is equal to its scope
         canvas.create_oval(t.x - size, t.y - size, t.x + size, t.y + size, fill='green2')
 
