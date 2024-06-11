@@ -17,6 +17,11 @@ def tick_agents():
     global agents, tasks, predators, ticks_elapsed, ticksDisplay, time_start, timeDisplay, sliderTPS
     # remove tasks with scope 0
     tasks[:] = filter(lambda t: t.scope > 0, tasks)
+    if len(tasks) == 0:
+        print(f'All tasks cleared in {ticks_elapsed/(datetime.now() - time_start).total_seconds():.2f} seconds')
+        os._exit(1)
+
+
     for agent in agents:
         agent.tick(agents, predators, tasks)
     for pred in predators:
@@ -90,7 +95,7 @@ def generateAndStart():
             )
         )
 
-    predators = [Predator(500, 500, PREDATOR_SPEED, PREDATOR_RADIUS, 2 * AGENT_AMOUNT)]
+    predators = [Predator(500, 500, PREDATOR_SPEED, PREDATOR_RADIUS, AGENT_AMOUNT + 1)]
 
     ticks_elapsed = 0
     time_start = datetime.now()
