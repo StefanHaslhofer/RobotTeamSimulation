@@ -15,12 +15,15 @@ class Agent:
         # change position along direction vector
         self.x += self.direction[0] * self.speed
         self.y += self.direction[1] * self.speed
-        # reflect movement at the edge of the map
-        if self.x < 0 or self.x > MAP_SIZE_X:
-            self.direction = (self.direction[0] * -1, self.direction[1])
+        center = (MAP_SIZE_X/2 - self.x, MAP_SIZE_Y/2 - self.y)
+        # reflect movement at the edge of the map to the center
+        if self.x < MAP_INNER_BORDER or self.x > MAP_SIZE_X - MAP_INNER_BORDER:
+            self.direction = center
+            # add a small random factor to x movement
             self.x += self.direction[0]
-        if self.y < 0 or self.y > MAP_SIZE_X:
-            self.direction = (self.direction[0], self.direction[1] * -1)
+        if self.y < MAP_INNER_BORDER or self.y > MAP_SIZE_Y - MAP_INNER_BORDER:
+            self.direction = center
+            # add a small random factor to y movement
             self.y += self.direction[1]
         # cap movement at edge of map
         # self.x = min(MAP_SIZE_X, max(0, self.x))

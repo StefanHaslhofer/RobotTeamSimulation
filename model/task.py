@@ -16,6 +16,7 @@ class Task(Agent):
         if self.scope > 0:
             self.scope -= 1
 
+
 def affecting_tasks(tasks: List[Task], coords) -> List[Task]:
     af_tasks = []
     for t in tasks:

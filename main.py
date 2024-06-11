@@ -72,9 +72,9 @@ def generateAndStart():
                 random.randrange(0, MAP_SIZE_Y),
                 (random.randrange(-1, 1), random.randrange(-1, 1)),
                 3,
-                20,
-                50,
-                300
+                R_ZONE_RADIUS,
+                O_ZONE_RADIUS,
+                A_ZONE_RADIUS
             )
         )
 
@@ -82,15 +82,15 @@ def generateAndStart():
     for i in range(int(sliderTaskNum.get())):
         tasks.append(
             Task(
-                random.randrange(0, MAP_SIZE_X),
-                random.randrange(0, MAP_SIZE_Y),
+                random.randrange(MAP_INNER_BORDER, MAP_SIZE_X - MAP_INNER_BORDER),
+                random.randrange(MAP_INNER_BORDER, MAP_SIZE_Y - MAP_INNER_BORDER),
                 int(sliderTaskScope.get()),
                 TASK_ATTRACTION_RADIUS,
                 TASK_FORCE_SCALE
             )
         )
 
-    predators = [Predator(500, 500, 8, 100, 5)]
+    predators = [Predator(500, 500, PREDATOR_SPEED, PREDATOR_RADIUS, 2 * AGENT_AMOUNT)]
 
     ticks_elapsed = 0
     time_start = datetime.now()
@@ -104,7 +104,7 @@ ticks_elapsed = 0
 time_start = datetime.now()
 
 root = tk.Tk()
-root.geometry(f'{MAP_SIZE_X}x{MAP_SIZE_Y}')
+root.geometry(f'{MAP_SIZE_X+50}x{MAP_SIZE_Y + 200}')
 
 ticksLabel = tk.Label(root, text = "Ticks run: ", width = 50)
 ticksDisplay = tk.Label(root, text ="0", width = 50)
