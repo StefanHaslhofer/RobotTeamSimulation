@@ -17,9 +17,6 @@ def tick_agents():
     global agents, tasks, predators, ticks_elapsed, ticksDisplay, time_start, timeDisplay, sliderTPS
     # remove tasks with scope 0
     tasks[:] = filter(lambda t: t.scope > 0, tasks)
-    if len(tasks) == 0:
-        print(f'All tasks cleared in {ticks_elapsed/(datetime.now() - time_start).total_seconds():.2f} seconds')
-        os._exit(1)
 
 
     for agent in agents:
@@ -33,7 +30,10 @@ def tick_agents():
     timeDisplay.config(text = f'{(datetime.now() - time_start).total_seconds():.2f} seconds')
     actualTPSDisplay.config(text = f'{ticks_elapsed/(datetime.now() - time_start).total_seconds():.2f}')
 
-    threading.Timer(1.0 / sliderTPS.get(), tick_agents).start()
+    if len(tasks) == 0:
+        print(f'All tasks cleared in {ticks_elapsed} ticks')
+    else:
+        threading.Timer(1.0 / sliderTPS.get(), tick_agents).start()
 
 
 def render_map():
