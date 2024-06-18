@@ -1,3 +1,4 @@
+import math
 from typing import List
 from typing import Tuple
 
@@ -36,9 +37,8 @@ class CouzinAgent(Agent):
         agents = list(filter(lambda a: a is not self, agents))
 
         # search for agents in zones
-        agents_r = agents_between_radi(agents, (self.x, self.y), 0, self.r_zone)
-        agents_o = agents_between_radi(agents, (self.x, self.y), self.r_zone, self.o_zone)
-        agents_a = agents_between_radi(agents, (self.x, self.y), self.o_zone, self.a_zone)
+
+        agents_r, agents_o, agents_a = agents_between_radi(agents, (self.x, self.y), [self.r_zone, self.o_zone, self.a_zone])
 
         # search for predators that influence the agent
         predators_r = affecting_predators(predators, (self.x, self.y))
@@ -61,21 +61,27 @@ class CouzinAgent(Agent):
         super().tick(agents, predators, tasks)
 
 
-def agents_between_radi(agents, coords, inner, outer) -> List[Agent]:
+def agents_between_radi(agents, coords, radii) -> List[List[Agent]]:
     """
     calculate all agents within the field between an inner radius and an outer radius
 
     :param agents: list of agents
     :param coords: coordinates of agent
-    :param inner: inner radius around agent
-    :param outer: outer radius around agent
-    :return: list of all agents within radius
+    :param radii: list of radii to sort agents into
+    :return: list of lists of all agents at the different distances
     """
-    agents_in_radius = []
+    agents_in_radius = [[] for _ in range(len(radii))]
+    squared_distances = []
+    for n in range(len(radii)):
+        squared_distances.append(radii[n] * radii[n])
     for agent in agents:
-        pos = np.linalg.norm([agent.x - coords[0], agent.y - coords[1]])
-        if inner < pos <= outer:
-            agents_in_radius.append(agent)
+        n = 0
+        for min_dist in squared_distances:
+            if math.pow(agent.x-coords[0], 2) + math.pow(agent.y-coords[1], 2) <= min_dist:
+                agents_in_radius[n].append(agent)
+                break
+            else:
+                n += 1
 
     return agents_in_radius
 
