@@ -37,22 +37,43 @@ def tick_agents():
 
 
 def render_map():
-    global agents, predators, tasks, canvas
-    canvas.delete("all")
+    global agents, predators, tasks, canvas, drawn_objects
     for agent in agents:
-        canvas.create_oval(agent.x - AGENT_SIZE, agent.y - AGENT_SIZE, agent.x + AGENT_SIZE, agent.y + AGENT_SIZE,
-                           fill='blue4')
-        canvas.create_line(agent.x, agent.y, agent.x + int(agent.direction[0] * 20),
+        canvas.coords(drawn_objects[agent][0], agent.x - AGENT_SIZE, agent.y - AGENT_SIZE, agent.x + AGENT_SIZE, agent.y + AGENT_SIZE)
+        canvas.coords(drawn_objects[agent][1], agent.x, agent.y, agent.x + int(agent.direction[0] * 20),
                            agent.y + int(agent.direction[1] * 20))
 
     for p in predators:
-        canvas.create_oval(p.x - PREDATOR_SIZE, p.y - PREDATOR_SIZE, p.x + PREDATOR_SIZE, p.y + PREDATOR_SIZE,
+        canvas.coords(drawn_objects[p], p.x - PREDATOR_SIZE, p.y - PREDATOR_SIZE, p.x + PREDATOR_SIZE, p.y + PREDATOR_SIZE)
+
+    for t in tasks:
+        size = (t.scope/sliderTaskScope.get()) * TASK_SIZE
+        # size of task is equal to its scope
+        canvas.coords(drawn_objects[t], t.x - size, t.y - size, t.x + size, t.y + size)
+
+
+drawn_objects = {}
+
+
+def render_map_first():
+    global agents, predators, tasks, canvas, drawn_objects
+    canvas.delete("all")
+    drawn_objects = {}
+    for agent in agents:
+        agent_circle = canvas.create_oval(agent.x - AGENT_SIZE, agent.y - AGENT_SIZE, agent.x + AGENT_SIZE, agent.y + AGENT_SIZE,
+                           fill='blue4')
+        agent_heading = canvas.create_line(agent.x, agent.y, agent.x + int(agent.direction[0] * 20),
+                           agent.y + int(agent.direction[1] * 20))
+        drawn_objects[agent] = (agent_circle, agent_heading)
+
+    for p in predators:
+        drawn_objects[p] = canvas.create_oval(p.x - PREDATOR_SIZE, p.y - PREDATOR_SIZE, p.x + PREDATOR_SIZE, p.y + PREDATOR_SIZE,
                            fill='red2')
 
     for t in tasks:
         size = (t.scope/sliderTaskScope.get()) * TASK_SIZE
         # size of task is equal to its scope
-        canvas.create_oval(t.x - size, t.y - size, t.x + size, t.y + size, fill='green2')
+        drawn_objects[t] = canvas.create_oval(t.x - size, t.y - size, t.x + size, t.y + size, fill='green2')
 
 
 def motion(event):
@@ -100,6 +121,7 @@ def generateAndStart():
 
     ticks_elapsed = 0
     time_start = datetime.now()
+    render_map_first()
     tick_agents()
 
 
