@@ -23,7 +23,7 @@ def tick_agents():
         agent.tick(agents, predators, tasks)
     for pred in predators:
         pred.tick(agents, predators, tasks)
-    render_map()
+    threading.Thread(target=render_map).start()
 
     ticks_elapsed += 1
     ticksDisplay.config(text = str(ticks_elapsed))
