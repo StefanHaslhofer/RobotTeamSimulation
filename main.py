@@ -36,7 +36,7 @@ def tick_agents(myExecutionNo):
     actualTPSDisplay.config(text = f'{ticks_elapsed/(datetime.now() - time_start).total_seconds():.2f}')
 
     if len(tasks) == 0:
-        print(f'Execution {myExecutionNo}: {ticks_elapsed} ticks')
+        printAndLog(f'{ticks_elapsed},{"PRED" if enablePredator.get()==1 else "PAR"},{time_start},({sliderZoneRepulsion.get()},{sliderZoneOrientation.get()},{sliderZoneAttraction.get()},{sliderZoneAttractionTask.get()},{sliderAgentNum.get()},{sliderTaskNum.get()},{sliderTaskScope.get()})')
         if enablePredator.get() == 0:
             print('Restarting...')
             generateAndStart()
@@ -44,6 +44,12 @@ def tick_agents(myExecutionNo):
         tickThread = threading.Timer(1.0 / sliderTPS.get(), tick_agents, [myExecutionNo])
         tickThread.start()
 
+
+def printAndLog(string):
+    print(string)
+    with open("results.csv", "a") as myfile:
+        myfile.write(string)
+        myfile.write('\n')
 
 def render_map():
     global agents, predators, tasks, canvas, drawn_objects
@@ -151,6 +157,8 @@ def setPredPreset():
     enablePredator.set(1)
 
 
+printAndLog("program started at " + str(datetime.now()))
+
 agents = []
 tasks = []
 predators = []
@@ -205,8 +213,6 @@ canvas = Canvas(root, width=MAP_SIZE_X, height=MAP_SIZE_Y)
 canvas.configure(bg='SkyBlue1')
 canvas.bind("<Motion>", motion)
 canvas.grid(row=4, column=0, columnspan=10)
-
-# TODO write execution result to file
 
 root.mainloop()
 os._exit(1)
