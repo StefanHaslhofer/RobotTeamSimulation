@@ -107,9 +107,9 @@ def generateAndStart():
                 random.randrange(0, MAP_SIZE_Y),
                 (random.uniform(-1, 1), random.uniform(-1, 1)),
                 3,
-                R_ZONE_RADIUS,
-                O_ZONE_RADIUS,
-                A_ZONE_RADIUS
+                int(sliderZoneRepulsion.get()),
+                int(sliderZoneOrientation.get()),
+                int(sliderZoneAttraction.get())
             )
         )
 
@@ -126,7 +126,9 @@ def generateAndStart():
             )
         )
 
-    predators = [Predator(500, 500, PREDATOR_SPEED, PREDATOR_RADIUS, AGENT_AMOUNT + 1)]
+    predators = []
+    if enablePredator.get() == 1:
+        predators = [Predator(500, 500, PREDATOR_SPEED, PREDATOR_RADIUS, AGENT_AMOUNT + 1)]
 
     ticks_elapsed = 0
     time_start = datetime.now()
@@ -144,25 +146,37 @@ time_start = datetime.now()
 root = tk.Tk()
 root.geometry(f'{MAP_SIZE_X+50}x{MAP_SIZE_Y + 200}')
 
-ticksLabel = tk.Label(root, text = "Ticks run: ", width = 50)
-ticksDisplay = tk.Label(root, text ="0", width = 50)
+ticksLabel = tk.Label(root, text = "Ticks run: ")
+ticksDisplay = tk.Label(root, text ="0")
 ticksLabel.grid(row=0, column=0)
 ticksDisplay.grid(row=0, column=1)
 
-timeLabel = tk.Label(root, text = "Time elapsed: ", width = 50)
-timeDisplay = tk.Label(root, text = "0", width = 50)
+timeLabel = tk.Label(root, text = "Time elapsed: ")
+timeDisplay = tk.Label(root, text = "0")
 timeLabel.grid(row=1, column=0)
 timeDisplay.grid(row=1, column=1)
 
-actualTPSLabel = tk.Label(root, text = "actual TPS: ", width = 50)
-actualTPSDisplay = tk.Label(root, text = "0", width = 50)
+actualTPSLabel = tk.Label(root, text = "actual TPS: ")
+actualTPSDisplay = tk.Label(root, text = "0")
 actualTPSLabel.grid(row=2, column=0)
 actualTPSDisplay.grid(row=2, column=1)
 
-sliderTPS = createConfigSlider("TPS", 5, 144, 0, 3, TICKS_PER_SECOND)
-sliderAgentNum = createConfigSlider("Agents", 1, 30, 1, 3, AGENT_AMOUNT)
-sliderTaskNum = createConfigSlider("Tasks", 1, 40, 2, 3, TASK_AMOUNT)
-sliderTaskScope = createConfigSlider("Task Scope", 5, 3000, 3, 3, TASK_SCOPE)
+sliderZoneRepulsion = createConfigSlider("Repulsion Zone", 0, 200, 0, 2, R_ZONE_RADIUS)
+sliderZoneOrientation = createConfigSlider("Orientation Zone", 0, 200, 1, 2, O_ZONE_RADIUS)
+sliderZoneAttraction = createConfigSlider("Attraction Zone", 0, 200, 2, 2, A_ZONE_RADIUS)
+sliderZoneAttractionTask = createConfigSlider("Task Attraction Zone", 0, 200, 3, 2, TASK_ATTRACTION_RADIUS)
+
+enablePredator = tk.IntVar()
+enablePredator.set(1)
+predatorOnRadio = tk.Radiobutton(root, text="Predator ON", variable=enablePredator, value=1)
+predatorOffRadio = tk.Radiobutton(root, text="Predator OFF", variable=enablePredator, value=0)
+predatorOnRadio.grid(row=0, column=6)
+predatorOffRadio.grid(row=1, column=6)
+
+sliderTPS = createConfigSlider("TPS", 5, 144, 0, 4, TICKS_PER_SECOND)
+sliderAgentNum = createConfigSlider("Agents", 1, 30, 1, 4, AGENT_AMOUNT)
+sliderTaskNum = createConfigSlider("Tasks", 1, 40, 2, 4, TASK_AMOUNT)
+sliderTaskScope = createConfigSlider("Task Scope", 5, 3000, 3, 4, TASK_SCOPE)
 
 startButton = tk.Button(root, text="Start", command=generateAndStart)
 startButton.grid(row = 3, column = 0)
