@@ -1,6 +1,5 @@
 import os
 import random
-import sys
 import threading
 import tkinter as tk
 from datetime import datetime
@@ -56,7 +55,10 @@ def render_map():
     for t in tasks:
         size = (t.scope/sliderTaskScope.get()) * TASK_SIZE
         # size of task is equal to its scope
-        canvas.coords(drawn_objects[t], t.x - size, t.y - size, t.x + size, t.y + size)
+        if size > 0:
+            canvas.coords(drawn_objects[t], t.x - size, t.y - size, t.x + size, t.y + size)
+        else:
+            canvas.delete(drawn_objects[t])
 
 
 drawn_objects = {}
