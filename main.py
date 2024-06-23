@@ -37,6 +37,9 @@ def tick_agents(myExecutionNo):
 
     if len(tasks) == 0:
         print(f'Execution {myExecutionNo}: {ticks_elapsed} ticks')
+        if enablePredator.get() == 0:
+            print('Restarting...')
+            generateAndStart()
     else:
         tickThread = threading.Timer(1.0 / sliderTPS.get(), tick_agents, [myExecutionNo])
         tickThread.start()
