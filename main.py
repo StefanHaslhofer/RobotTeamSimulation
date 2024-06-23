@@ -203,5 +203,7 @@ canvas.configure(bg='SkyBlue1')
 canvas.bind("<Motion>", motion)
 canvas.grid(row=4, column=0, columnspan=10)
 
+# TODO write execution result to file
+
 root.mainloop()
 os._exit(1)
