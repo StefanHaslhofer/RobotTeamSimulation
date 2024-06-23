@@ -12,18 +12,24 @@ from model.couzin_agent import CouzinAgent
 from model.predator import Predator
 from model.task import Task
 
+# increments each time we start a new run
+executionNo = 0
 
-def tick_agents():
-    global agents, tasks, predators, ticks_elapsed, ticksDisplay, time_start, timeDisplay, sliderTPS
+def tick_agents(myExecutionNo):
+    global agents, tasks, predators, ticks_elapsed, ticksDisplay, time_start, timeDisplay, sliderTPS, executionNo
+    # a new execution has been started, we are no longer needed
+    if myExecutionNo != executionNo:
+        return
+
     # remove tasks with scope 0
     tasks[:] = filter(lambda t: t.scope > 0, tasks)
-
 
     for agent in agents:
         agent.tick(agents, predators, tasks)
     for pred in predators:
         pred.tick(agents, predators, tasks)
-    threading.Thread(target=render_map).start()
+    drawThread = threading.Thread(target=render_map)
+    drawThread.start()
 
     ticks_elapsed += 1
     ticksDisplay.config(text = str(ticks_elapsed))
@@ -31,9 +37,10 @@ def tick_agents():
     actualTPSDisplay.config(text = f'{ticks_elapsed/(datetime.now() - time_start).total_seconds():.2f}')
 
     if len(tasks) == 0:
-        print(f'All tasks cleared in {ticks_elapsed} ticks')
+        print(f'Execution {myExecutionNo}: {ticks_elapsed} ticks')
     else:
-        threading.Timer(1.0 / sliderTPS.get(), tick_agents).start()
+        tickThread = threading.Timer(1.0 / sliderTPS.get(), tick_agents, [myExecutionNo])
+        tickThread.start()
 
 
 def render_map():
@@ -89,7 +96,7 @@ def createConfigSlider(label, min, max, row, col, default):
     return sliderNew
 
 def generateAndStart():
-    global agents, tasks, predators, time_start, ticks_elapsed, sliderAgentNum, sliderTaskNum, sliderTaskSize
+    global agents, tasks, predators, time_start, ticks_elapsed, sliderAgentNum, sliderTaskNum, sliderTaskScope, executionNo
     agents = []
     for i in range(int(sliderAgentNum.get())):
         agents.append(
@@ -121,8 +128,9 @@ def generateAndStart():
 
     ticks_elapsed = 0
     time_start = datetime.now()
+    executionNo += 1
     render_map_first()
-    tick_agents()
+    tick_agents(executionNo)
 
 
 agents = []
