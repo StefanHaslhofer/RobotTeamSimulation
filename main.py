@@ -136,6 +136,17 @@ def generateAndStart():
     render_map_first()
     tick_agents(executionNo)
 
+def setParPreset():
+    sliderZoneRepulsion.set(R_ZONE_RADIUS_PAR)
+    sliderZoneOrientation.set(O_ZONE_RADIUS_PAR)
+    sliderZoneAttraction.set(A_ZONE_RADIUS_PAR)
+    enablePredator.set(0)
+def setPredPreset():
+    sliderZoneRepulsion.set(R_ZONE_RADIUS_PRED)
+    sliderZoneOrientation.set(O_ZONE_RADIUS_PRED)
+    sliderZoneAttraction.set(A_ZONE_RADIUS_PRED)
+    enablePredator.set(1)
+
 
 agents = []
 tasks = []
@@ -161,9 +172,9 @@ actualTPSDisplay = tk.Label(root, text = "0")
 actualTPSLabel.grid(row=2, column=0)
 actualTPSDisplay.grid(row=2, column=1)
 
-sliderZoneRepulsion = createConfigSlider("Repulsion Zone", 0, 200, 0, 2, R_ZONE_RADIUS)
-sliderZoneOrientation = createConfigSlider("Orientation Zone", 0, 200, 1, 2, O_ZONE_RADIUS)
-sliderZoneAttraction = createConfigSlider("Attraction Zone", 0, 200, 2, 2, A_ZONE_RADIUS)
+sliderZoneRepulsion = createConfigSlider("Repulsion Zone", 0, 200, 0, 2, R_ZONE_RADIUS_PRED)
+sliderZoneOrientation = createConfigSlider("Orientation Zone", 0, 200, 1, 2, O_ZONE_RADIUS_PRED)
+sliderZoneAttraction = createConfigSlider("Attraction Zone", 0, 200, 2, 2, A_ZONE_RADIUS_PRED)
 sliderZoneAttractionTask = createConfigSlider("Task Attraction Zone", 0, 200, 3, 2, TASK_ATTRACTION_RADIUS)
 
 enablePredator = tk.IntVar()
@@ -180,6 +191,12 @@ sliderTaskScope = createConfigSlider("Task Scope", 5, 3000, 3, 4, TASK_SCOPE)
 
 startButton = tk.Button(root, text="Start", command=generateAndStart)
 startButton.grid(row = 3, column = 0)
+
+presetButtonPred = tk.Button(root, text="PRED Preset", command=setPredPreset)
+presetButtonPred.grid(row = 2, column = 6)
+
+presetButtonPar = tk.Button(root, text="PAR Preset", command=setParPreset)
+presetButtonPar.grid(row = 3, column = 6)
 
 canvas = Canvas(root, width=MAP_SIZE_X, height=MAP_SIZE_Y)
 canvas.configure(bg='SkyBlue1')
