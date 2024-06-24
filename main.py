@@ -1,6 +1,7 @@
 import os
 import random
 import threading
+import time
 import tkinter as tk
 from datetime import datetime
 from tkinter import Canvas, HORIZONTAL
@@ -137,7 +138,7 @@ def generateAndStart():
 
     predators = []
     if enablePredator.get() == 1:
-        predators = [Predator(500, 500, PREDATOR_SPEED, PREDATOR_RADIUS, AGENT_AMOUNT + 1)]
+        predators = [Predator(500, 500, PREDATOR_SPEED, int(sliderPredatorRepulsionRadius.get()), int(sliderPredatorRepulsionStrength.get()))]
 
     ticks_elapsed = 0
     time_start = datetime.now()
@@ -192,22 +193,24 @@ enablePredator = tk.IntVar()
 enablePredator.set(1)
 predatorOnRadio = tk.Radiobutton(root, text="Predator ON", variable=enablePredator, value=1)
 predatorOffRadio = tk.Radiobutton(root, text="Predator OFF", variable=enablePredator, value=0)
-predatorOnRadio.grid(row=0, column=6)
-predatorOffRadio.grid(row=1, column=6)
+predatorOnRadio.grid(row=2, column=6)
+predatorOffRadio.grid(row=3, column=6)
 
 sliderTPS = createConfigSlider("TPS", 5, 144, 0, 4, TICKS_PER_SECOND)
 sliderAgentNum = createConfigSlider("Agents", 1, 30, 1, 4, AGENT_AMOUNT)
 sliderTaskNum = createConfigSlider("Tasks", 1, 40, 2, 4, TASK_AMOUNT)
 sliderTaskScope = createConfigSlider("Task Scope", 5, 3000, 3, 4, TASK_SCOPE)
+sliderPredatorRepulsionRadius = createConfigSlider("Predator Repulsion Zone", 0, 200, 0, 6, PREDATOR_RADIUS)
+sliderPredatorRepulsionStrength = createConfigSlider("Predator Repulsion Force", 0, 100, 1, 6, PREDATOR_FORCE)
 
 startButton = tk.Button(root, text="Start", command=generateAndStart)
 startButton.grid(row = 3, column = 0)
 
 presetButtonPred = tk.Button(root, text="PRED Preset", command=setPredPreset)
-presetButtonPred.grid(row = 2, column = 6)
+presetButtonPred.grid(row = 2, column = 7)
 
 presetButtonPar = tk.Button(root, text="PAR Preset", command=setParPreset)
-presetButtonPar.grid(row = 3, column = 6)
+presetButtonPar.grid(row = 3, column = 7)
 
 canvas = Canvas(root, width=MAP_SIZE_X, height=MAP_SIZE_Y)
 canvas.configure(bg='SkyBlue1')
