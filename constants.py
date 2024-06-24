@@ -1,8 +1,8 @@
 # simulation parameters
 TICKS_PER_SECOND = 50
 # map parameters
-MAP_SIZE_X = 1080
-MAP_SIZE_Y = 720
+MAP_SIZE_X = 1180
+MAP_SIZE_Y = 620
 MAP_INNER_BORDER = 25
 # predator parameters
 PREDATOR_SIZE = 10
