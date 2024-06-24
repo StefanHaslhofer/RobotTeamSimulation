@@ -115,8 +115,8 @@ def generateAndStart():
     for i in range(int(sliderAgentNum.get())):
         agents.append(
             CouzinAgent(
-                random.randrange(0, 50),
-                random.randrange(0, 50),
+                random.randrange(MAP_SIZE_X/2-25, MAP_SIZE_X/2+25),
+                random.randrange(MAP_SIZE_Y/2-25, MAP_SIZE_Y/2+25),
                 (random.uniform(-1, 1), random.uniform(-1, 1)),
                 3,
                 int(sliderZoneRepulsion.get()),
