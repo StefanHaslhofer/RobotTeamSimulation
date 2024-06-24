@@ -37,9 +37,9 @@ def tick_agents(myExecutionNo):
     actualTPSDisplay.config(text = f'{ticks_elapsed/(datetime.now() - time_start).total_seconds():.2f}')
 
     if len(tasks) == 0:
+        print(f'Execution {myExecutionNo} done')
         printAndLog(f'{ticks_elapsed},{"PRED" if enablePredator.get()==1 else "PAR"},{time_start},{time_start.microsecond},({sliderZoneRepulsion.get()},{sliderZoneOrientation.get()},{sliderZoneAttraction.get()},{sliderZoneAttractionTask.get()},{sliderAgentNum.get()},{sliderTaskNum.get()},{sliderTaskScope.get()},{sliderPredatorRepulsionRadius.get()},{sliderPredatorRepulsionStrength.get()})')
         if enablePredator.get() == 0:
-            print('Restarting...')
             generateAndStart()
     else:
         tickThread = threading.Timer(1.0 / sliderTPS.get(), tick_agents, [myExecutionNo])
@@ -200,7 +200,7 @@ predatorOffRadio.grid(row=3, column=6)
 sliderTPS = createConfigSlider("TPS", 5, 144, 0, 4, TICKS_PER_SECOND)
 sliderAgentNum = createConfigSlider("Agents", 1, 30, 1, 4, AGENT_AMOUNT)
 sliderTaskNum = createConfigSlider("Tasks", 1, 40, 2, 4, TASK_AMOUNT)
-sliderTaskScope = createConfigSlider("Task Scope", 5, 3000, 3, 4, TASK_SCOPE)
+sliderTaskScope = createConfigSlider("Task Scope", 5, 2000, 3, 4, TASK_SCOPE)
 sliderPredatorRepulsionRadius = createConfigSlider("Predator Repulsion Zone", 0, 200, 0, 6, PREDATOR_RADIUS)
 sliderPredatorRepulsionStrength = createConfigSlider("Predator Repulsion Force", 0, 100, 1, 6, PREDATOR_FORCE)
 
