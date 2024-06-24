@@ -6,7 +6,7 @@ import numpy as np
 
 from model.agent import Agent
 from model.predator import Predator, affecting_predators
-from model.task import Task, affecting_tasks
+from model.task import Task, affecting_task
 from util import normalize_vec, add_vec
 
 
@@ -44,8 +44,8 @@ class CouzinAgent(Agent):
         predators_r = affecting_predators(predators, (self.x, self.y))
 
         # search for tasks that influence the agent
-        tasks_a = affecting_tasks(tasks, (self.x, self.y))
-        for t in tasks_a:
+        t = affecting_task(tasks, (self.x, self.y))
+        if t is not None:
             pos = np.linalg.norm([t.x - self.x, t.y - self.y])
             if pos <= t.action_radius:
                 t.decrease_scope()
@@ -53,7 +53,7 @@ class CouzinAgent(Agent):
         # calculate forces
         self.f_r = calculate_repulsion_force(self, agents_r, predators_r)
         self.f_o = calculate_orientation_force(self, agents_o)
-        self.f_a = calculate_attraction_force(self, agents_a, tasks_a)
+        self.f_a = calculate_attraction_force(self, agents_a, [] if t is None else [t])
 
         # change direction according to acting forces
         self.direction = tuple(np.sum([self._direction, self.f_r, self.f_o, self.f_a], axis=0))

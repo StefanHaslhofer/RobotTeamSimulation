@@ -18,11 +18,14 @@ class Task(Agent):
             self.scope -= 1
 
 
-def affecting_tasks(tasks: List[Task], coords) -> List[Task]:
-    af_tasks = []
+def affecting_task(tasks: List[Task], coords) -> Task:
+    af_task = None
+    dist = 999999999
     for t in tasks:
         pos = np.linalg.norm([t.x - coords[0], t.y - coords[1]])
         if pos <= t.radius:
-            af_tasks.append(t)
+            if pos < dist:
+                dist = pos
+                af_task = t
 
-    return af_tasks
+    return af_task
