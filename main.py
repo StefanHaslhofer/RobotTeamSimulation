@@ -37,7 +37,7 @@ def tick_agents(myExecutionNo):
     actualTPSDisplay.config(text = f'{ticks_elapsed/(datetime.now() - time_start).total_seconds():.2f}')
 
     if len(tasks) == 0:
-        printAndLog(f'{ticks_elapsed},{"PRED" if enablePredator.get()==1 else "PAR"},{time_start},({sliderZoneRepulsion.get()},{sliderZoneOrientation.get()},{sliderZoneAttraction.get()},{sliderZoneAttractionTask.get()},{sliderAgentNum.get()},{sliderTaskNum.get()},{sliderTaskScope.get()})')
+        printAndLog(f'{ticks_elapsed},{"PRED" if enablePredator.get()==1 else "PAR"},{time_start},{time_start.microsecond},({sliderZoneRepulsion.get()},{sliderZoneOrientation.get()},{sliderZoneAttraction.get()},{sliderZoneAttractionTask.get()},{sliderAgentNum.get()},{sliderTaskNum.get()},{sliderTaskScope.get()})')
         if enablePredator.get() == 0:
             print('Restarting...')
             generateAndStart()
@@ -110,6 +110,8 @@ def createConfigSlider(label, min, max, row, col, default):
 def generateAndStart():
     global agents, tasks, predators, time_start, ticks_elapsed, sliderAgentNum, sliderTaskNum, sliderTaskScope, executionNo
     agents = []
+    time_start = datetime.now()
+    random.seed(time_start.microsecond)
     for i in range(int(sliderAgentNum.get())):
         agents.append(
             CouzinAgent(
@@ -141,7 +143,6 @@ def generateAndStart():
         predators = [Predator(500, 500, PREDATOR_SPEED, int(sliderPredatorRepulsionRadius.get()), int(sliderPredatorRepulsionStrength.get()))]
 
     ticks_elapsed = 0
-    time_start = datetime.now()
     executionNo += 1
     render_map_first()
     tick_agents(executionNo)
