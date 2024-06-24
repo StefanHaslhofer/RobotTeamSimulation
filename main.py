@@ -37,7 +37,7 @@ def tick_agents(myExecutionNo):
     actualTPSDisplay.config(text = f'{ticks_elapsed/(datetime.now() - time_start).total_seconds():.2f}')
 
     if len(tasks) == 0:
-        printAndLog(f'{ticks_elapsed},{"PRED" if enablePredator.get()==1 else "PAR"},{time_start},{time_start.microsecond},({sliderZoneRepulsion.get()},{sliderZoneOrientation.get()},{sliderZoneAttraction.get()},{sliderZoneAttractionTask.get()},{sliderAgentNum.get()},{sliderTaskNum.get()},{sliderTaskScope.get()})')
+        printAndLog(f'{ticks_elapsed},{"PRED" if enablePredator.get()==1 else "PAR"},{time_start},{time_start.microsecond},({sliderZoneRepulsion.get()},{sliderZoneOrientation.get()},{sliderZoneAttraction.get()},{sliderZoneAttractionTask.get()},{sliderAgentNum.get()},{sliderTaskNum.get()},{sliderTaskScope.get()},{sliderPredatorRepulsionRadius.get()},{sliderPredatorRepulsionStrength.get()})')
         if enablePredator.get() == 0:
             print('Restarting...')
             generateAndStart()
