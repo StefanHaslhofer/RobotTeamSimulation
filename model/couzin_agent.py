@@ -97,7 +97,7 @@ def calculate_repulsion_force(center, agents: List[Agent], predators: List[Preda
     """
     force = (0, 0)
 
-    # repulsion form nearby agents
+    # repulsion from nearby agents
     for a in agents:
         d = normalize_vec((a.x - center.x, a.y - center.y))
         force = add_vec(force, d)
@@ -105,7 +105,7 @@ def calculate_repulsion_force(center, agents: List[Agent], predators: List[Preda
     # repulsion form nearby predators
     for p in predators:
         d = normalize_vec((p.x - center.x, p.y - center.y))
-        # multiply with scaler because predator repulsion is stronger
+        # multiply with scalar because predator repulsion is stronger
         force = add_vec(force, tuple(np.multiply(d, p.force_scale)))
 
     return -force[0], -force[1]
